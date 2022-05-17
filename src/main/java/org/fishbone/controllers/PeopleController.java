@@ -1,9 +1,10 @@
 package org.fishbone.controllers;
 
-
 import javax.validation.Valid;
 import org.fishbone.dao.PersonDAO;
 import org.fishbone.models.Person;
+import org.fishbone.util.PersonValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private PersonDAO personDAO;
+    private final PersonDAO personDAO;
+    private final PersonValidator personValidator;
 
-    public PeopleController(PersonDAO personDAO) {
+    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -45,7 +48,9 @@ public class PeopleController {
 
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
+        personValidator.validate(person, bindingResult);
+
+        if (bindingResult.hasErrors()) {
             return "people/new";
         }
         personDAO.save(person);
@@ -61,7 +66,9 @@ public class PeopleController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
                          @PathVariable("id") int id) {
-        if(bindingResult.hasErrors()){
+        personValidator.validate(person, bindingResult);
+
+        if (bindingResult.hasErrors()) {
             return "people/edit";
         }
         personDAO.update(id, person);

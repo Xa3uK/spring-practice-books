@@ -4,7 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.fishbone.models.Person;
+import org.fishbone.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -33,8 +35,15 @@ public class PersonDAO {
             .orElse(null);
     }
 
+    public Optional<Person> show(String email) {
+        return jdbcTemplate.query("select * from person where email=?", new Object[]{email},
+                new BeanPropertyRowMapper<>(Person.class))
+            .stream()
+            .findAny();
+    }
+
     public void save(Person person) {
-        jdbcTemplate.update("insert into person values(1, ?,?,?)", person.getName(), person.getAge(),
+        jdbcTemplate.update("insert into person(name, age , email) values (?,?,?)", person.getName(), person.getAge(),
             person.getEmail());
     }
 

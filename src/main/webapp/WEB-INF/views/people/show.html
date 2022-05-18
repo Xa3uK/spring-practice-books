@@ -2,21 +2,37 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>Person</title>
 </head>
 <body>
-<p th:text="${person.getName() + ', ' + person.getAge()}"></p>
-<p th:text="${person.getId()}"></p>
+<p th:text="${person.getFullName + ', ' + person.getDateOfBirth()}">User</p>
 
-<p th:text="${person.getEmail()}"></p>
+<div th:if="${books.isEmpty()}">
+  <p> User dont take any book yet </p>
+  <hr/>
+</div>
 
-<p th:text="${person.getAddress()}"></p>
+<div th:if="${!books.isEmpty()}">
+  <hr/>
+  <b>Books</b>
+  <br/>
+  <table th:each="book : ${books}">
+    <tr th:text="${book.getTitle() + '. ' + book.getAuthor() + ', ' + book.getYear()}">Book</tr>
+  </table>
+  <hr/>
+</div>
 
-<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
-<br>
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+  <input type="submit" value="Edit">
+</form>
+
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
   <input type="submit" value="Delete">
 </form>
+
+<a href="/people"><button>All People</button></a>
+<a href="/books"><button>All Books</button></a>
 
 </body>
 </html>

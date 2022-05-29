@@ -15,6 +15,7 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 db.properties
+hibernate.properties
 
 # Intellij
 .idea/

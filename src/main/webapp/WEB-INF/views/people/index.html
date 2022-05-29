@@ -12,5 +12,12 @@
   <a th:href="@{/people/{id}(id=${person.getId()})}" th:text="${person.getFullName()}">user</a>
   <a th:href="@{/people/{id}(id=${person.getId()})}" th:text="${person.getDateOfBirth()}">user</a>
 </div>
+
+<a href="/people">
+  <button>All People</button>
+</a>
+<a href="/books">
+  <button>All Books</button>
+</a>
 </body>
 </html>
